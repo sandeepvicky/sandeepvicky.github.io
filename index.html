@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sandeep Singh | Math Master</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0a1628;
+      --deep: #0d1f3c;
+      --gold: #c9a84c;
+      --gold-light: #e8c96e;
+      --cream: #f5f0e8;
+      --muted: #8899aa;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── ANIMATED MATH BACKGROUND ── */
+    .math-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .math-bg span {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      color: rgba(201,168,76,0.06);
+      font-size: clamp(1rem, 3vw, 2.5rem);
+      animation: float linear infinite;
+      user-select: none;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(30deg); opacity: 0; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .hero-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--white);
+      animation: fadeDown 0.9s ease both;
+      animation-delay: 0.1s;
+    }
+
+    .hero-name span {
+      color: var(--gold);
+      display: block;
+    }
+
+    .hero-title {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-weight: 300;
+      color: var(--muted);
+      margin-top: 1.2rem;
+      letter-spacing: 0.05em;
+      animation: fadeDown 1s ease both;
+      animation-delay: 0.2s;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--gold);
+      margin: 2.5rem auto;
+      animation: expandWidth 1.2s ease both;
+      animation-delay: 0.4s;
+    }
+
+    @keyframes expandWidth {
+      from { width: 0; }
+      to   { width: 60px; }
+    }
+
+    .hero-formula {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: rgba(201,168,76,0.5);
+      animation: fadeDown 1.1s ease both;
+      animation-delay: 0.5s;
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-cue::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 3rem;
+    }
+
+    /* ── CARDS ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 16px;
+      padding: 2rem 1.8rem;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--gold-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ── ABOUT ── */
+    .about-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    @media (max-width: 640px) {
+      .about-block { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    .about-text {
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: #b8c8d8;
+    }
+
+    .info-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .info-list li {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .info-list li:last-child { border-bottom: none; }
+
+    .info-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .info-value {
+      font-size: 1rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    /* ── QUALIFICATION TIMELINE ── */
+    .timeline {
+      position: relative;
+      padding-left: 2.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    .tl-dot {
+      position: absolute;
+      left: -2.9rem;
+      top: 0.3rem;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 4px rgba(201,168,76,0.2);
+    }
+
+    .tl-degree {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--gold-light);
+      margin-bottom: 0.3rem;
+    }
+
+    .tl-field {
+      font-size: 0.95rem;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+
+    .tl-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    /* ── SUBJECTS ── */
+    .subjects-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .subject-pill {
+      padding: 0.6rem 1.4rem;
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 100px;
+      font-size: 0.9rem;
+      color: var(--cream);
+      background: rgba(201,168,76,0.08);
+      transition: all 0.25s ease;
+      cursor: default;
+    }
+
+    .subject-pill:hover {
+      background: var(--gold);
+      color: var(--navy);
+      border-color: var(--gold);
+      transform: scale(1.05);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    footer .footer-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--gold);
+    }
+
+    footer p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ── DIVIDER LINE ── */
+    .section-line {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(201,168,76,0.2), transparent);
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Floating Math Symbols -->
+<div class="math-bg" id="mathBg"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">Educator · Mentor · Scholar</div>
+  <h1 class="hero-name">
+    Sandeep<span>Singh</span>
+  </h1>
+  <p class="hero-title">Mathematics Master &nbsp;·&nbsp; GHS Mastgarh, Tarn Taran</p>
+  <div class="hero-divider"></div>
+  <p class="hero-formula">∫ Knowledge · ∑ Dedication · √ Excellence</p>
+  <div class="scroll-cue">scroll</div>
+</div>
+
+<div class="section-line"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label">Who I Am</p>
+  <h2 class="section-title">Passionate About <br/>the Language of Numbers</h2>
+  <div class="about-block">
+    <div>
+      <p class="about-text">
+        I am a dedicated Mathematics educator committed to making complex concepts accessible and engaging for every student. My teaching philosophy centers on building strong foundational understanding, encouraging logical reasoning, and nurturing a genuine love for mathematics.
+        <br/><br/>
+        With a strong academic background and years of classroom experience, I strive to create an environment where students grow in both knowledge and confidence.
+      </p>
+    </div>
+    <ul class="info-list">
+      <li>
+        <span class="info-label">Full Name</span>
+        <span class="info-value">Sandeep Singh</span>
+      </li>
+      <li>
+        <span class="info-label">Designation</span>
+        <span class="info-value">Math Master (Teacher)</span>
+      </li>
+      <li>
+        <span class="info-label">School</span>
+        <span class="info-value">Govt. High School Mastgarh</span>
+      </li>
+      <li>
+        <span class="info-label">District</span>
+        <span class="info-value">Tarn Taran, Punjab</span>
+      </li>
+      <li>
+        <span class="info-label">Subject</span>
+        <span class="info-value">Mathematics</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<div class="section-line"></div>
+
+<!-- QUALIFICATION -->
+<section id="qualification">
+  <p class="section-label">Academic Journey</p>
+  <h2 class="section-title">Qualifications</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-degree">M.Sc. Mathematics</div>
+      <div class="tl-field">Master of Science – Mathematics</div>
+      <div class="tl-note">Advanced study in Pure &amp; Applied Mathematics, Analysis, Algebra, and more.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-degree">B.A.Ed.</div>
+      <div class="tl-field">Bachelor of Arts with Education</div>
+      <div class="tl-note">Integrated professional teacher training program blending subject expertise with pedagogy.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-line"></div>
+
+<!-- SUBJECTS -->
+<section id="subjects">
+  <p class="section-label">Expertise</p>
+  <h2 class="section-title">Topics I Teach</h2>
+  <div class="subjects-wrap">
+    <span class="subject-pill">Algebra</span>
+    <span class="subject-pill">Geometry</span>
+    <span class="subject-pill">Trigonometry</span>
+    <span class="subject-pill">Arithmetic</span>
+    <span class="subject-pill">Calculus</span>
+    <span class="subject-pill">Statistics</span>
+    <span class="subject-pill">Number Theory</span>
+    <span class="subject-pill">Coordinate Geometry</span>
+    <span class="subject-pill">Mensuration</span>
+    <span class="subject-pill">Mental Mathematics</span>
+  </div>
+</section>
+
+<div class="section-line"></div>
+
+<!-- HIGHLIGHTS -->
+<section id="highlights">
+  <p class="section-label">My Approach</p>
+  <h2 class="section-title">What I Bring to <br/>the Classroom</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">📐</div>
+      <h3>Conceptual Clarity</h3>
+      <p>Breaking down abstract concepts into clear, step-by-step explanations every student can follow.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <h3>Result Oriented</h3>
+      <p>Focused on examination preparation with practice-based learning that builds speed and accuracy.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌱</div>
+      <h3>Student Growth</h3>
+      <p>Encouraging every student to push their limits and develop a growth mindset towards learning.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h3>Data-Driven Teaching</h3>
+      <p>Tracking student progress and adapting methods to ensure continuous improvement for all learners.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🤝</div>
+      <h3>Inclusive Education</h3>
+      <p>Creating an equal and encouraging space for every student regardless of their starting level.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏆</div>
+      <h3>Academic Excellence</h3>
+      <p>Inspiring students to strive for excellence and take pride in their mathematical achievements.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-line"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Sandeep Singh</div>
+  <p>Math Master · GHS Mastgarh, Tarn Taran, Punjab · M.Sc. · B.A.Ed.</p>
+  <p style="margin-top:1rem; font-size:0.75rem; color:#445566;">© 2026 Sandeep Singh. All rights reserved.</p>
+</footer>
+
+<script>
+  // Generate floating math symbols
+  const symbols = ['∫','∑','√','π','∞','Δ','θ','α','β','γ','±','≈','≠','≤','≥','x²','y²','f(x)','dy/dx','∂','⊂','∩','∪','∀','∃','λ','μ','σ','φ','ω'];
+  const bg = document.getElementById('mathBg');
+
+  for (let i = 0; i < 28; i++) {
+    const span = document.createElement('span');
+    span.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    span.style.left = Math.random() * 100 + '%';
+    span.style.animationDuration = (18 + Math.random() * 22) + 's';
+    span.style.animationDelay = (Math.random() * 20) + 's';
+    span.style.fontSize = (1 + Math.random() * 2) + 'rem';
+    bg.appendChild(span);
+  }
+
+  // Fade-in on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.card, .tl-item, .subject-pill').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
